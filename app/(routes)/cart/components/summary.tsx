@@ -1,7 +1,7 @@
 "use client"
 
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 
 import Button from "@/components/ui/button";
@@ -13,15 +13,20 @@ const Summary = () => {
     const searchParams = useSearchParams();
     const items = useCart((state) => state.items);
     const removeAll = useCart((state) => state.removeAll);
+    const isNotified = useRef(false);
 
     useEffect(() => {
-        if (searchParams.get("success")) {
-            toast.success("Payment completed.");
-            removeAll();
-        }
+        if (!isNotified.current) { 
+            if (searchParams.get("success")) {
+                toast.success("Payment completed.");
+                removeAll();
+                isNotified.current = true; 
+            }
 
-        if (searchParams.get("canceled")) {
-            toast.error("Something went wrong.");
+            if (searchParams.get("canceled")) {
+                toast.error("Something went wrong.");
+                isNotified.current = true; 
+            }
         }
     }, [searchParams, removeAll]);
 
