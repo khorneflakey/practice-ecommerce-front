@@ -2,22 +2,22 @@
 
 import Container from "@/components/ui/container";
 import useCart from "@/hooks/use-cart";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import CartItem from "./components/cart-item";
 import Summary from "./components/summary";
 
-const CardPage = () => {
-    /*const [isMounted, setIsMounted] = useState(false);
+const CartPage = () => {
+    const [isMounted, setIsMounted] = useState(false);
+
+    const cart = useCart();
 
     useEffect(() => {
-        setIsMounted(false)
+        setIsMounted(true)
     },[]);
 
     if (!isMounted) {
         return null;
-    }*/
-
-    const cart = useCart();
+    }
 
     return ( 
         <div className="bg-white">
@@ -38,7 +38,9 @@ const CardPage = () => {
                                 ))}
                             </ul>
                         </div>
-                        <Summary />
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <Summary />
+                        </Suspense>
                     </div>
                 </div>
             </Container>
@@ -46,4 +48,4 @@ const CardPage = () => {
      );
 }
  
-export default CardPage;
+export default CartPage;
